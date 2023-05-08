@@ -13,7 +13,7 @@ namespace Ass3
 
         uint JobTime { get; set; }
 
-        Dictionary<string, object> JobDependencies { get; set; }
+        List<string> JobDependencies { get; set; }
 
     }
 

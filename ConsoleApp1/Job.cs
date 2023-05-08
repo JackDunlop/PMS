@@ -11,14 +11,25 @@ namespace Ass3
     {
         public string JobID { get; set; }
         public uint JobTime { get; set; }
-        public Dictionary<string, object> JobDependencies { get; set; }
+        public List<string> JobDependencies { get; set; }
 
-        public Job(string jobId, uint jobTime, Dictionary<string, object> jobDependencies)
+        public Job(string jobId, uint jobTime)
         {
             JobID = jobId;
             JobTime = jobTime;
-            JobDependencies = jobDependencies;
+        
         }
+
+        public Job(string jobId, uint jobTime, List<string> jobDependencies)
+        {
+            JobID = jobId;
+            JobTime = jobTime;
+            JobDependencies = new List<string>(jobDependencies);
+           
+           
+        }
+
+
     }
-   
+
 }
