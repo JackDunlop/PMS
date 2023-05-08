@@ -6,15 +6,18 @@ namespace Ass3
     {
         static void Main(string[] args)
         {
-            Job jobA = new Job("A", 5);
-            Job jobB = new Job("B", 3);
-            Job jobC = new Job("C", 4);
-            List<string> jobD_deps = new List<string> { "A" };
-            Job jobD = new Job("D", 6, jobD_deps);
-            List<string> jobE_deps = new List<string> { "B", "C" };
-            Job jobE = new Job("E", 2, jobE_deps);
-            List<string> jobF_deps = new List<string> { "D", "E" };
-            Job jobF = new Job("F", 7, jobF_deps);
+
+            FileManager fileManager = new FileManager();
+            //fileManager.CreateFile();
+            Job jobA = new Job("T1", 5);
+            Job jobB = new Job("T2", 3);
+            Job jobC = new Job("T3", 4);
+            List<string> jobD_deps = new List<string> { "T1" };
+            Job jobD = new Job("T4", 6, jobD_deps);
+            List<string> jobE_deps = new List<string> { "T2", "T3" };
+            Job jobE = new Job("T5", 2, jobE_deps);
+            List<string> jobF_deps = new List<string> { "T4", "T5" };
+            Job jobF = new Job("T6", 7, jobF_deps);
             List<Job> jobs = new List<Job> { jobA, jobB, jobC, jobD, jobE, jobF };
             foreach (Job job in jobs)
             {
