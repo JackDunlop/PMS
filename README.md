@@ -21,7 +21,7 @@ These are requirements of this assignment, the following has been for my own per
 
 
 
-This project shows that I Jack Dunlop understand the following topics:
+This project shows that I Jack Dunlop understand the following topics/concepts/tools:
 
   C#
 
