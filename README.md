@@ -23,9 +23,14 @@ These are requirements of this assignment, the following has been for my own per
 
 This project shows that I Jack Dunlop understand the following topics:
 
-C#
-GitHub - GitHub Issues, GitHub commits
-OOP Principles
-Linear Data Structures
-Non-Linear Data Structures
-Complex Algorithms
+  C#
+
+  GitHub - GitHub Issues, GitHub commits
+  
+  OOP Principles
+  
+  Linear Data Structures
+  
+  Non-Linear Data Structures
+  
+  Complex Algorithms
