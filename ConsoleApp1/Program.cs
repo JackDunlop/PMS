@@ -18,7 +18,7 @@ namespace Ass3
                     Console.WriteLine($"{dependencies}");
                 }
             }
-            //Job jobA = new Job("T1", 5);gh
+            //Job jobA = new Job("T1", 5);ghgfgf
             //Job jobB = new Job("T2", 3);
             //Job jobC = new Job("T3", 4);
             //List<string> jobD_deps = new List<string> { "T1" };
