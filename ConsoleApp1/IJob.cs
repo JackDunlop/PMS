@@ -13,7 +13,7 @@ namespace Ass3
 
         uint JobTime { get; set; }
 
-        List<string> JobDependencies { get; set; }
+        LinkedList<string> JobDependencies { get; set; }
 
     }
 
