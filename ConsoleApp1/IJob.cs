@@ -17,9 +17,9 @@ namespace Ass3
 
 
         // create add method
-        public void AddJobDependency(Dictionary<string, Job> jobs);
+        public void AddJob(Dictionary<string, Job> jobs);
         // create remove method
-
+        public void RemoveJob(Dictionary<string, Job> jobs);
         // update time method
     }
 

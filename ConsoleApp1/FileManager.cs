@@ -31,9 +31,9 @@ namespace Ass3
             }
         }
 
-        public Dictionary<string, Job> CreateFile(Dictionary<string, Job> jobs)
+        public Dictionary<string, Job> CreateFile(Dictionary<string, Job> jobs, string path)
         {
-            string path = GetValidFileName();
+            
             if (File.Exists(path))
             {
                 Console.WriteLine($"Opening existing file: {path}");
@@ -53,7 +53,7 @@ namespace Ass3
             }
         }
 
-        private static string GetValidFileName()
+        private string GetValidFileName()
         {
             while (true)
             {
@@ -63,12 +63,23 @@ namespace Ass3
                 if (!string.IsNullOrWhiteSpace(readPathLine) && readPathLine.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
                 {
                     return readPathLine;
+                   
                 }
-
-                Console.WriteLine("Please enter a non-null name or must have txt on the end.");
+                else { Console.WriteLine("Please enter a non-null name or must have txt on the end."); continue; }
+              
             }
         }
-
+        public void UpdateFile(string path, Dictionary<string, Job> jobs)
+        {
+            using (StreamWriter writer = new StreamWriter(path, false))
+            {
+                foreach (Job job in jobs.Values)
+                {
+                    string dependencies = job.JobDependencies != null && job.JobDependencies.Any() ? $",{string.Join(",", job.JobDependencies)}" : "";
+                    writer.WriteLine($"{job.JobID}, {job.JobTime}{dependencies}");
+                }
+            }
+        }
         // rewrite over file method
     }
 }

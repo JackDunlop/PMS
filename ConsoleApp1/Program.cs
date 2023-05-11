@@ -6,14 +6,60 @@ namespace Ass3
     {// updated
         static void Main(string[] args)
         {
+            string path;
           //  HashSet<Job> jobs = new HashSet<Job>();
             FileManager fileManager = new FileManager();
-            Job jobManger = new Job();
-
+            Job jobManager = new Job();
             Dictionary<string, Job> jobs = new Dictionary<string, Job>();
-            fileManager.CreateFile(jobs);
-            jobManger.AddJobDependency(jobs);
+            while (true)
+            {
+                Console.Write("Please enter file name: ");
+                string readPathLine = Console.ReadLine();
 
+                if (!string.IsNullOrWhiteSpace(readPathLine) && readPathLine.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
+                {
+                    path = readPathLine;
+                    fileManager.CreateFile(jobs, path);
+                    break;
+                }
+                else { Console.WriteLine("Please enter a non-null name or must have txt on the end."); continue; }
+
+            }
+            // Call TopologicalSort to get the sorted list of job IDs
+            List<string> sortedJobs = jobManager.TopologicalSort(jobs);
+
+            // Loop through the sorted list and print the job IDs
+            foreach (string jobId in sortedJobs)
+            {
+             //   Console.WriteLine(jobId);
+            }
+            //while (true) 
+            //{
+            //    Console.WriteLine("Choose an option:");
+            //    Console.WriteLine("1) Add Job");
+            //    Console.WriteLine("2) Remove Job");
+            //    Console.WriteLine("3) Update Time");
+            //    Console.Write("\nSelect an option: ");
+            //    string option = Console.ReadLine();
+            //    switch (option)
+            //    {
+            //        case "1":
+            //            jobManager.AddJob(jobs);
+            //            fileManager.UpdateFile(path, jobs);
+            //            break;
+            //        case "2":
+            //            jobManager.RemoveJob(jobs);
+            //            fileManager.UpdateFile(path, jobs);
+            //            break;
+            //        case "3":
+            //            jobManager.UpdateJob(jobs);
+            //            fileManager.UpdateFile(path, jobs);
+            //            break;
+            //        default:
+            //            Console.WriteLine("Invalid option");
+            //            break;
+            //    }
+            //}
         }
     }
 }
