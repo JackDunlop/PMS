@@ -6,7 +6,7 @@ namespace Ass3
     {
         static void Main(string[] args)
         {
-            List<Job> jobs = new List<Job>();
+            HashSet<Job> jobs = new HashSet<Job>();
             FileManager fileManager = new FileManager();
             fileManager.CreateFile(jobs);
             Console.WriteLine("---");

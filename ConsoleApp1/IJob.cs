@@ -13,10 +13,16 @@ namespace Ass3
 
         uint JobTime { get; set; }
 
-        LinkedList<string> JobDependencies { get; set; }
+        HashSet<string> JobDependencies { get; set; }
 
+
+        // create add method
+
+        // create remove method
+
+        // update time method
     }
 
-   
+        
 }
 

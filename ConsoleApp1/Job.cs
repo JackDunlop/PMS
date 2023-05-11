@@ -11,7 +11,7 @@ namespace Ass3
     {
         public string JobID { get; set; }
         public uint JobTime { get; set; }
-        public LinkedList<string> JobDependencies { get; set; }
+        public HashSet<string> JobDependencies { get; set; }
 
         public Job(string jobId, uint jobTime)
         {
@@ -20,14 +20,16 @@ namespace Ass3
         
         }
 
-        public Job(string jobId, uint jobTime, LinkedList<string> jobDependencies)
+        public Job(string jobId, uint jobTime, HashSet<string> jobDependencies)
         {
             JobID = jobId;
             JobTime = jobTime;
-            JobDependencies = new LinkedList<string>(jobDependencies);
+            JobDependencies = new HashSet<string>(jobDependencies);
            
            
         }
+
+
 
 
     }

@@ -8,7 +8,7 @@ namespace Ass3
     {
 
 
-        public List<Job> ReadJobs(string path, List<Job> jobs) 
+        public HashSet<Job> ReadJobs(string path, HashSet<Job> jobs) 
         {
             using (StreamReader reader = new StreamReader(path))
             {
@@ -19,11 +19,11 @@ namespace Ass3
                     string[] parts = line.Split(',');
                     string jobId = parts[0].Trim();
                     uint jobTime = uint.Parse(parts[1]);
-                    LinkedList<string> jobDependencies = new LinkedList<string>();
+                    HashSet<string> jobDependencies = new HashSet<string>();
                    
                     for (int i = 2; i < parts.Length; i++)
                     {
-                        jobDependencies.AddLast(parts[i]);
+                        jobDependencies.Add(parts[i]);
                     }
 
                     Job job = new Job(jobId, jobTime, jobDependencies);
@@ -34,7 +34,7 @@ namespace Ass3
         }
 
 
-        public List<Job> CreateFile(List<Job> jobs)
+        public HashSet<Job> CreateFile(HashSet<Job> jobs)
         {
             string path = GetValidFileName();
             if (File.Exists(path))
@@ -72,5 +72,7 @@ namespace Ass3
                 Console.WriteLine("Please enter a non-null name or must have txt on the end.");
             }
         }
+
+        // rewrite over file method
     }
 }
