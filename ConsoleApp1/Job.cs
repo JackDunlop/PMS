@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Ass3
-{// updated
+{
     public class Job : IJob
     {
         public string JobID { get; set; }
