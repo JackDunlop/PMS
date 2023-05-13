@@ -26,13 +26,7 @@ namespace Ass3
                 else { Console.WriteLine("Please enter a non-null name or must have txt on the end."); continue; }
 
             }
-            // Call TopologicalSort to get the sorted list of job IDs
-
-            //Console.WriteLine("Topological Order:");
-            //foreach (string jobId in topologicalOrder)
-            //{
-            //    Console.WriteLine(jobId);
-            //}
+        
             while (true)
             {
                 Console.WriteLine("Choose an option:");
