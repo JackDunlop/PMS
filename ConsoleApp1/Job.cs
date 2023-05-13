@@ -1,6 +1,7 @@
 ﻿using Ass3;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
@@ -37,6 +38,7 @@ namespace Ass3
         }
         public void UpdateJob(Dictionary<string, Job> jobs)
         {
+
             uint validtime;
             while (true)
             {
@@ -77,12 +79,13 @@ namespace Ass3
                     continue;
                 }
             }
-
+            
             foreach (Job job in jobs.Values)
             {
                 string dependencies = job.JobDependencies != null && job.JobDependencies.Any() ? $", {string.Join(",", job.JobDependencies)}" : "";
                 Console.WriteLine($"{job.JobID}, {job.JobTime}{dependencies}");
             }
+          //  LinkedList<string> sequence = FindJobSequence(jobs);
         }
         public void RemoveJob(Dictionary<string, Job> jobs)
         {
@@ -95,6 +98,13 @@ namespace Ass3
                 {
                     if (jobs.ContainsKey(removejob))
                     {
+                        // Remove the job from all dependencies
+                        foreach (Job job in jobs.Values)
+                        {//T4, 90,T1,T7
+                            job.JobDependencies?.Remove(removejob);
+                        }
+
+                        // Remove the job from the dictionary
                         jobs.Remove(removejob);
                         Console.WriteLine($"Job '{removejob}' has been removed.");
                         break;
@@ -110,13 +120,14 @@ namespace Ass3
                     Console.WriteLine("Invalid input. Please enter a valid job name.");
                     continue;
                 }
-            }
+            }//T4, 90, T1,T7
             foreach (Job job in jobs.Values)
             {
                 string dependencies = job.JobDependencies != null && job.JobDependencies.Any() ? $", {string.Join(",", job.JobDependencies)}" : "";
 
                 Console.WriteLine($"{job.JobID}, {job.JobTime}{dependencies}");
             }
+          //  LinkedList<string> sequence = FindJobSequence(jobs);
         }
         public void AddJob(Dictionary<string, Job> jobs)
         {
@@ -183,6 +194,7 @@ namespace Ass3
             }
             Job newJob = new Job(readnewjobname, validtime, jobDependencies);
             jobs[readnewjobname] = newJob;
+           // LinkedList<string> sequence = FindJobSequence(jobs);
             foreach (Job job in jobs.Values)
             {
                 string dependencies = job.JobDependencies != null && job.JobDependencies.Any() ? $", {string.Join(",", job.JobDependencies)}" : "";
@@ -190,6 +202,7 @@ namespace Ass3
                 Console.WriteLine($"{job.JobID}, {job.JobTime}{dependencies}");
             }
         }
+        
         public LinkedList<string> FindJobSequence(Dictionary<string, Job> jobs)
         {
             LinkedList<string> sequence = new LinkedList<string>();// linked list which will be used to return the sorted sequence
@@ -211,7 +224,7 @@ namespace Ass3
             return sequence;
         }
 
-        private static bool DFS(Job startJob, LinkedList<string> sequence, HashSet<string> visited, Dictionary<string, Job> jobs)
+        private bool DFS(Job startJob, LinkedList<string> sequence, HashSet<string> visited, Dictionary<string, Job> jobs)
         {
             Stack<Job> stack = new Stack<Job>();
             stack.Push(startJob);
@@ -226,6 +239,12 @@ namespace Ass3
 
                     foreach (string dependencyId in job.JobDependencies)
                     {
+                        if (!jobs.ContainsKey(dependencyId))
+                        {
+                            // Dependency job doesn't exist, so we skip it for now
+                            continue;
+                        }
+
                         Job dependencyJob = jobs[dependencyId];
 
                         if (!visited.Contains(dependencyJob.JobID))
