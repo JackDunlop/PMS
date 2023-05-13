@@ -80,6 +80,32 @@ namespace Ass3
                 }
             }
         }
+        public void UpdateSequence(LinkedList<string> sequence)
+        {
+            string path = "Sequence.txt";
+            using (StreamWriter writer = new StreamWriter(path, false))
+            {
+                if (File.Exists(path))
+                {
+                   
+                    if (sequence != null)
+                    {
+                        writer.WriteLine($"{string.Join(", ", sequence)}");
+                    }
+                   
+                }
+                else
+                {
+              
+                    if (sequence != null)
+                    {
+                        writer.WriteLine($"{string.Join(", ", sequence)}");
+                    }
+                    File.Create(path).Close();
+                  
+                }
+            }
+        }
         // rewrite over file method
     }
 }

@@ -31,9 +31,9 @@ namespace Ass3
         {
             JobID = jobId;
             JobTime = jobTime;
-            JobDependencies = new HashSet<string>(jobDependencies);
-           
-           
+            JobDependencies = new HashSet<string>(jobDependencies.Select(d => d.Trim()));
+
+
         }
         public void UpdateJob(Dictionary<string, Job> jobs)
         {
@@ -190,36 +190,69 @@ namespace Ass3
                 Console.WriteLine($"{job.JobID}, {job.JobTime}{dependencies}");
             }
         }
-
-        public List<string> TopologicalSort(Dictionary<string, Job> jobs)
+        public LinkedList<string> FindJobSequence(Dictionary<string, Job> jobs)
         {
-            Dictionary<string, int> inDegree = new Dictionary<string, int>();
-            foreach (Job job in jobs.Values)
-            {
-                inDegree[job.JobID.Trim()] = 0;
+            LinkedList<string> sequence = new LinkedList<string>();// linked list which will be used to return the sorted sequence
+            HashSet<string> visited = new HashSet<string>(); // keeping track of vistened jobs 
 
-            }
             foreach (Job job in jobs.Values)
             {
-                foreach (string dependencyId in job.JobDependencies)
+                if (!visited.Contains(job.JobID)) // Add a check for visited nodes
                 {
-                    string trimmedId = dependencyId.Trim();
-                    if (!inDegree.ContainsKey(trimmedId))
+                    if (!DFS(job, sequence, visited, jobs)) // error handling
                     {
-                        inDegree[trimmedId] = 0;
+                        Console.WriteLine("There is a circular dependency in the jobs graph.");
+                        return null;
                     }
-                    inDegree[trimmedId]++;
-                    Console.WriteLine(dependencyId);
                 }
             }
-            List<string> sorted = new List<string>();
-            Queue<string> queue = new Queue<string>();
-            
-            if (sorted.Count != jobs.Count)
+
+          
+            return sequence;
+        }
+
+        private static bool DFS(Job startJob, LinkedList<string> sequence, HashSet<string> visited, Dictionary<string, Job> jobs)
+        {
+            Stack<Job> stack = new Stack<Job>();
+            stack.Push(startJob);
+
+            while (stack.Count > 0)
             {
-                throw new Exception("Graph contains a cycle");
+                Job job = stack.Peek();
+
+                if (job.JobDependencies != null)
+                {
+                    bool allDependenciesVisited = true;
+
+                    foreach (string dependencyId in job.JobDependencies)
+                    {
+                        Job dependencyJob = jobs[dependencyId];
+
+                        if (!visited.Contains(dependencyJob.JobID))
+                        {
+                            if (stack.Contains(dependencyJob))
+                            {
+                                return false; 
+                            }
+
+                            stack.Push(dependencyJob);
+                            allDependenciesVisited = false;
+                            break;
+                        }
+                    }
+
+                    if (!allDependenciesVisited)
+                    {
+                        continue;
+                    }
+                }
+
+                stack.Pop();
+                visited.Add(job.JobID);
+                sequence.AddLast(job.JobID);
             }
-            return sorted;
+
+            return true;
         }
 
     }
