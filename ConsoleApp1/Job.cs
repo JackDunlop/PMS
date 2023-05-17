@@ -274,6 +274,79 @@ namespace Ass3
             return true;
         }
 
+        // extra feautre for testing don't include in marking (unless it perfroms better than my other method :) )
+        public LinkedList<string> FindJobSequenceWithRecursion(Dictionary<string, Job> jobs)
+        {
+            LinkedList<string> sequence = new LinkedList<string>();// linked list which will be used to return the sorted sequence
+            HashSet<string> visited = new HashSet<string>(); // keeping track of vistened jobs 
+            HashSet<string> recursionStack = new HashSet<string>();
+            foreach (Job job in jobs.Values)
+            {
+                if (!visited.Contains(job.JobID)) // Add a check for visited nodes
+                {
+                    if (!DFSWithRecursion(job, sequence, visited, recursionStack, jobs)) // error handling
+                    {
+                        Console.WriteLine("There is a circular dependency in the jobs graph.");
+                        return null;
+                    }
+                }
+            }
+            return sequence;
+        }
+
+        private bool DFSWithRecursion(Job startJob, LinkedList<string> sequence, HashSet<string> visited, HashSet<string> recursionStack, Dictionary<string, Job> jobs)
+        {
+            Stack<Job> stack = new Stack<Job>();
+            stack.Push(startJob);
+            recursionStack.Add(startJob.JobID); // Add to recursion stack
+
+            while (stack.Count > 0)
+            {
+                Job job = stack.Peek();
+
+                if (job.JobDependencies != null)
+                {
+                    bool allDependenciesVisited = true;
+
+                    foreach (string dependencyId in job.JobDependencies)
+                    {
+                        if (!jobs.ContainsKey(dependencyId))
+                        {
+                            // Dependency job doesn't exist, so we skip it for now
+                            continue;
+                        }
+
+                        Job dependencyJob = jobs[dependencyId];
+
+                        if (!visited.Contains(dependencyJob.JobID))
+                        {
+                            if (recursionStack.Contains(dependencyJob.JobID)) // Check for cycle
+                            {
+                                return false;
+                            }
+
+                            stack.Push(dependencyJob);
+                            recursionStack.Add(dependencyJob.JobID); // Add to recursion block
+                            allDependenciesVisited = false;
+                            break;
+                        }
+                    }
+
+                    if (!allDependenciesVisited)
+                    {
+                        continue;
+                    }
+                }
+
+                stack.Pop();
+                visited.Add(job.JobID);
+                recursionStack.Remove(job.JobID); // Remove from recursion stack
+                sequence.AddLast(job.JobID);
+            }
+
+            return true;
+        }
+
     }
 
-}//j
+}
