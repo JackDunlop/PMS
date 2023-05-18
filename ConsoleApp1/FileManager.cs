@@ -90,7 +90,7 @@ namespace Ass3
                    
                     if (sequence != null)
                     {
-                        writer.WriteLine($"{string.Join(", ", sequence)}");
+                        writer.WriteLine($"{string.Join(",", sequence)}");
                     }
                    
                 }
@@ -99,7 +99,7 @@ namespace Ass3
               
                     if (sequence != null)
                     {
-                        writer.WriteLine($"{string.Join(", ", sequence)}");
+                        writer.WriteLine($"{string.Join(",", sequence)}");
                     }
                     File.Create(path).Close();
                   
@@ -118,7 +118,7 @@ namespace Ass3
 
                     if (earilesttimes != null)
                     {
-                        writer.WriteLine($"{string.Join(", ", earilesttimes)}");
+                        writer.WriteLine($"{string.Join("", earilesttimes)}");
                     }
 
                 }
@@ -127,7 +127,7 @@ namespace Ass3
 
                     if (earilesttimes != null)
                     {
-                        writer.WriteLine($"{string.Join(", ", earilesttimes)}");
+                        writer.WriteLine($"{string.Join("", earilesttimes)}");
                     }
                     File.Create(path).Close();
 

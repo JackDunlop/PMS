@@ -29,12 +29,14 @@ namespace Ass3
           
             while (true)
             {
-                Console.WriteLine("Choose an option:");
+                Console.WriteLine("Choose an option, enter exit if you goto the wrong menu:");
+                Console.WriteLine("If you enter the wrong input for a menu type 'back' and you will go back to the main menu, this can be done anywhere in the program ");
                 Console.WriteLine("1) Add Job");
                 Console.WriteLine("2) Remove Job");
                 Console.WriteLine("3) Update Time");
                 Console.WriteLine("4) Find Sequence");
                 Console.WriteLine("5) Find Earliest Time to complete");
+                Console.WriteLine("6) Exit Program");
                 Console.Write("\nSelect an option: ");
                 string option = Console.ReadLine();
                 switch (option)
@@ -55,7 +57,7 @@ namespace Ass3
                         LinkedList<string> jobSequence = jobManager.FindJobSequence(jobs);
                         if (jobSequence != null)
                         {
-                            Console.WriteLine($"{string.Join(", ", jobSequence)}");
+                            Console.WriteLine($"{string.Join(",", jobSequence)}");
                         }
                         fileManager.UpdateSequence(jobSequence);
                         break;
@@ -67,6 +69,9 @@ namespace Ass3
                             Console.WriteLine($"{string.Join("", jobearliest)}");
                         }
                         fileManager.UpdateEarilestTimes(jobearliest);
+                        break;
+                    case "6":
+                        Environment.Exit(0);
                         break;
 
                     default:

@@ -1,0 +1,2 @@
+the txt files are saved in the bin of the project, added this note based on this slack comment
+(couldn't find it lol but it was something along the lines of if you store it somewhere back a note for markers of where the txt files are saved)

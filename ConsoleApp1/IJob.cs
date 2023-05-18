@@ -9,20 +9,38 @@ namespace Ass3
     public interface IJob
     {
 
-        string JobID { get; set; }
+        // half of the methods should be private or other methods for test sake i made them all public
 
-        uint JobTime { get; set; }
+        public string JobID { get; set; }
+        public uint JobTime { get; set; }
+        public HashSet<string> JobDependencies { get; set; }
 
-        HashSet<string> JobDependencies { get; set; } // updated
-
-
-        // create add method
-        public void AddJob(Dictionary<string, Job> jobs);
-        // create remove method
+        public void UpdateJob(Dictionary<string, Job> jobs);
         public void RemoveJob(Dictionary<string, Job> jobs);
-        // update time method
+        
+        public void AddJob(Dictionary<string, Job> jobs);
+
+        public LinkedList<string> FindJobSequence(Dictionary<string, Job> jobs);
+        
+
+       public bool DFS(Job startJob, LinkedList<string> sequence, HashSet<string> visited, Dictionary<string, Job> jobs);
+
+
+        // all public for testing
+        public LinkedList<string> FindEarliestTime(Dictionary<string, Job> jobs);
+        
+
+        public Dictionary<string, uint> CalculateEarliestTimes(Dictionary<string, HashSet<string>> graph, Dictionary<string, uint> durations);
+        
+
+        public HashSet<string> TopologicalSort(Dictionary<string, HashSet<string>> graph);
+
+        public void DFS2(string node, Dictionary<string, HashSet<string>> graph, HashSet<string> visited, HashSet<string> order);
+       
+
+
     }
 
-        
+
 }
 
