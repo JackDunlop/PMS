@@ -34,6 +34,7 @@ namespace Ass3
                 Console.WriteLine("2) Remove Job");
                 Console.WriteLine("3) Update Time");
                 Console.WriteLine("4) Find Sequence");
+                Console.WriteLine("5) Find Earliest Time to complete");
                 Console.Write("\nSelect an option: ");
                 string option = Console.ReadLine();
                 switch (option)
@@ -58,6 +59,16 @@ namespace Ass3
                         }
                         fileManager.UpdateSequence(jobSequence);
                         break;
+
+                    case "5":
+                        LinkedList<string> jobearliest = jobManager.FindEarliestTime(jobs);
+                        if (jobearliest != null)
+                        {
+                            Console.WriteLine($"{string.Join("", jobearliest)}");
+                        }
+                        fileManager.UpdateEarilestTimes(jobearliest);
+                        break;
+
                     default:
                         Console.WriteLine("Invalid option");
                         break;

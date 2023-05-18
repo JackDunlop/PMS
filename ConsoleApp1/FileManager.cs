@@ -106,6 +106,34 @@ namespace Ass3
                 }
             }
         }
+
+
+        public void UpdateEarilestTimes(LinkedList<string> earilesttimes)
+        {
+            string path = "EarliestTimes.txt";
+            using (StreamWriter writer = new StreamWriter(path, false))
+            {
+                if (File.Exists(path))
+                {
+
+                    if (earilesttimes != null)
+                    {
+                        writer.WriteLine($"{string.Join(", ", earilesttimes)}");
+                    }
+
+                }
+                else
+                {
+
+                    if (earilesttimes != null)
+                    {
+                        writer.WriteLine($"{string.Join(", ", earilesttimes)}");
+                    }
+                    File.Create(path).Close();
+
+                }
+            }
+        }
         // rewrite over file method
     }
 }

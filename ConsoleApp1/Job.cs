@@ -274,6 +274,97 @@ namespace Ass3
             return true;
         }
 
+
+
+        public LinkedList<string> FindEarliestTime(Dictionary<string, Job> jobs)
+        {
+            LinkedList<string> earliestTime = new LinkedList<string>();
+            Dictionary<string, HashSet<string>> graph = new Dictionary<string, HashSet<string>>();
+            Dictionary<string, uint> durations = new Dictionary<string, uint>();
+
+            // Build the graph and durations dictionary
+            foreach (KeyValuePair<string, Job> job in jobs)
+            {
+                string task = job.Key;
+                durations[task] = job.Value.JobTime;
+                if (!graph.ContainsKey(task))
+                    graph[task] = new HashSet<string>();
+
+                foreach (string dependency in job.Value.JobDependencies)
+                {
+                    graph[task].Add(dependency);
+                }
+            }
+
+            Dictionary<string, uint> earliestTimes = CalculateEarliestTimes(graph, durations);
+            SortedDictionary<string, uint> sortedEarliestTimes = new SortedDictionary<string, uint>(earliestTimes);
+            earliestTimes = new Dictionary<string, uint>(sortedEarliestTimes);
+
+            foreach (KeyValuePair<string, uint> pair in earliestTimes)
+            {
+                earliestTime.AddLast($"{pair.Key}, {pair.Value}\n");
+            }
+
+            return earliestTime;
+        }
+
+        private Dictionary<string, uint> CalculateEarliestTimes(Dictionary<string, HashSet<string>> graph, Dictionary<string, uint> durations)
+        {
+            Dictionary<string, uint> earliestTimes = new Dictionary<string, uint>();
+
+            HashSet<string> order = TopologicalSort(graph);
+
+            foreach (string node in order)
+            {
+                uint maxCompletionTime = 0;
+                foreach (string dependency in graph[node])
+                {
+                    uint completionTime = 0;
+                    if (earliestTimes.ContainsKey(dependency))
+                    {
+                        completionTime = earliestTimes[dependency] + durations[dependency];
+                    }
+                    maxCompletionTime = Math.Max(maxCompletionTime, completionTime);
+                }
+
+                earliestTimes[node] = maxCompletionTime;
+            }
+
+            return earliestTimes;
+        }
+
+        private HashSet<string> TopologicalSort(Dictionary<string, HashSet<string>> graph)
+        {
+            HashSet<string> visited = new HashSet<string>();
+            HashSet<string> order = new HashSet<string>();
+
+            foreach (string node in graph.Keys)
+            {
+                if (!visited.Contains(node))
+                    DFS(node, graph, visited, order);
+            }
+
+            return order;
+        }
+
+        private void DFS(string node, Dictionary<string, HashSet<string>> graph, HashSet<string> visited, HashSet<string> order)
+        {
+            visited.Add(node);
+
+            if (graph.ContainsKey(node))
+            {
+                foreach (string neighbor in graph[node])
+                {
+                    if (!visited.Contains(neighbor))
+                        DFS(neighbor, graph, visited, order);
+                }
+            }
+
+            order.Add(node);
+        }
+
+
+
         // extra feautre for testing don't include in marking (unless it perfroms better than my other method :) )
         public LinkedList<string> FindJobSequenceWithRecursion(Dictionary<string, Job> jobs)
         {
