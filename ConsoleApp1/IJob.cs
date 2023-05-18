@@ -9,7 +9,7 @@ namespace Ass3
     public interface IJob
     {
 
-        // half of the methods should be private or other methods for test sake i made them all public
+        // half of the methods should be private or other  types of access modifiers for test sake i made them all public
 
         public string JobID { get; set; }
         public uint JobTime { get; set; }
