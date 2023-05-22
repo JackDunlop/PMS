@@ -1,2 +1,7 @@
 the txt files are saved in the bin of the project, added this note based on this slack comment
 (couldn't find it lol but it was something along the lines of if you store it somewhere make a note for markers of where the txt files are saved)
+
+
+notes:
+don't like the two dfs algorithim might see if i can use something else.
+
