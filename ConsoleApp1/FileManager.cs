@@ -16,7 +16,8 @@ namespace Ass3
                 {
                     string[] parts = line.Split(',');
                     string jobId = parts[0].Trim();
-                    uint jobTime = uint.Parse(parts[1]);
+                    uint jobTime = uint.Parse(parts[1]); // fix
+                    Console.WriteLine(jobTime);
                     HashSet<string> jobDependencies = new HashSet<string>();
 
                     for (int i = 2; i < parts.Length; i++)
@@ -38,11 +39,11 @@ namespace Ass3
             {
                 Console.WriteLine($"Opening existing file: {path}");
                 ReadJobs(path, jobs);
-                foreach (Job job in jobs.Values)
-                {
-                    string dependencies = job.JobDependencies != null && job.JobDependencies.Any() ? $",{string.Join(",", job.JobDependencies)}" : "";
-                    Console.WriteLine($"{job.JobID}, {job.JobTime}{dependencies}");
-                }
+                //foreach (Job job in jobs.Values)
+                //{
+                //    string dependencies = job.JobDependencies != null && job.JobDependencies.Any() ? $", {string.Join(", ", job.JobDependencies)}" : " ";
+                //    Console.WriteLine($"{job.JobID}, {job.JobTime}{dependencies}");
+                //}
                 return jobs;
             }
             else
@@ -75,9 +76,10 @@ namespace Ass3
             {
                 foreach (Job job in jobs.Values)
                 {
-                    string dependencies = job.JobDependencies != null && job.JobDependencies.Any() ? $",{string.Join(",", job.JobDependencies)}" : "";
+                    string dependencies = job.JobDependencies != null && job.JobDependencies.Any() ? $", {string.Join(", ", job.JobDependencies)}" : " ";
                     writer.WriteLine($"{job.JobID}, {job.JobTime}{dependencies}");
                 }
+               
             }
         }
         public void UpdateSequence(LinkedList<string> sequence)
@@ -90,7 +92,7 @@ namespace Ass3
                    
                     if (sequence != null)
                     {
-                        writer.WriteLine($"{string.Join(",", sequence)}");
+                        writer.WriteLine($"{string.Join(", ", sequence)}");
                     }
                    
                 }
@@ -99,7 +101,7 @@ namespace Ass3
               
                     if (sequence != null)
                     {
-                        writer.WriteLine($"{string.Join(",", sequence)}");
+                        writer.WriteLine($"{string.Join(", ", sequence)}");
                     }
                     File.Create(path).Close();
                   
@@ -118,7 +120,7 @@ namespace Ass3
 
                     if (earilesttimes != null)
                     {
-                        writer.WriteLine($"{string.Join("", earilesttimes)}");
+                        writer.WriteLine($"{string.Join(" ", earilesttimes)}");
                     }
 
                 }
@@ -127,7 +129,7 @@ namespace Ass3
 
                     if (earilesttimes != null)
                     {
-                        writer.WriteLine($"{string.Join("", earilesttimes)}");
+                        writer.WriteLine($"{string.Join(" ", earilesttimes)}");
                     }
                     File.Create(path).Close();
 

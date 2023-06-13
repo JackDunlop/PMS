@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -157,7 +159,7 @@ namespace Ass3
                     Console.WriteLine("Invalid name please try again: ");
                     continue;
                 }
-                else if (jobs.ContainsKey(readnewjobname))
+                else if (jobs.ContainsKey(readnewjobname.ToUpper()))
                 {
                     Console.WriteLine("This job is already in our database.");
                     continue;
@@ -276,7 +278,10 @@ namespace Ass3
         public bool DFS(Job startJob, LinkedList<string> sequence, HashSet<string> visited, Dictionary<string, Job> jobs)
         {
             Stack<Job> stack = new Stack<Job>();
+            HashSet<string> inStack = new HashSet<string>(); 
+
             stack.Push(startJob);
+            inStack.Add(startJob.JobID); 
 
             while (stack.Count > 0)
             {
@@ -290,7 +295,6 @@ namespace Ass3
                     {
                         if (!jobs.ContainsKey(dependencyId))
                         {
-                            
                             continue;
                         }
 
@@ -298,12 +302,13 @@ namespace Ass3
 
                         if (!visited.Contains(dependencyJob.JobID))
                         {
-                            if (stack.Contains(dependencyJob))
+                            if (inStack.Contains(dependencyJob.JobID)) 
                             {
-                                return false; 
+                                return false;
                             }
 
                             stack.Push(dependencyJob);
+                            inStack.Add(dependencyJob.JobID); 
                             allDependenciesVisited = false;
                             break;
                         }
@@ -315,18 +320,20 @@ namespace Ass3
                     }
                 }
 
-                stack.Pop();
-                visited.Add(job.JobID);
-                sequence.AddLast(job.JobID);
+                Job finishedJob = stack.Pop();
+                inStack.Remove(finishedJob.JobID); 
+                visited.Add(finishedJob.JobID);
+                sequence.AddLast(finishedJob.JobID);
             }
 
             return true;
         }
 
 
-        // all public for testing
+        
         public LinkedList<string> FindEarliestTime(Dictionary<string, Job> jobs)
         {
+            
             LinkedList<string> earliestTime = new LinkedList<string>();
             Dictionary<string, HashSet<string>> graph = new Dictionary<string, HashSet<string>>();
             Dictionary<string, uint> durations = new Dictionary<string, uint>();
@@ -344,18 +351,11 @@ namespace Ass3
                     graph[task].Add(dependency);
                 }
             }
-            //Dictionary<string, uint> earliestTimes = CalculateEarliestTimes(graph, durations);
-            //SortedDictionary<string, uint> sortedEarliestTimes = new SortedDictionary<string, uint>(earliestTimes);
-            //earliestTimes = new Dictionary<string, uint>(sortedEarliestTimes);
-            //Console.WriteLine("Sorted lexicographically, nothing in given sheets said anything about how these should be ordered, in terms of ordered based on when they were added or anything like that so I ordered it lexicographically.");
-            //foreach (KeyValuePair<string, uint> pair in earliestTimes)
-            //{
-            //    earliestTime.AddLast($"{pair.Key}, {pair.Value}\n");
-            //}
+       
 
-            //return earliestTime;
+   
             Dictionary<string, uint> earliestTimes = CalculateEarliestTimes(graph, durations);
-           // Console.WriteLine("Order is based on the order items were added to 'jobs'.");
+          
             foreach (string task in jobKeys)
             {
                 if (earliestTimes.ContainsKey(task))
@@ -371,7 +371,7 @@ namespace Ass3
         {
             Dictionary<string, uint> earliestTimes = new Dictionary<string, uint>();
 
-            HashSet<string> order = TopologicalSort(graph);
+            List<string> order = TopologicalSort(graph);
 
             foreach (string node in order)
             {
@@ -398,7 +398,7 @@ namespace Ass3
                 }
                 else
                 {
-                   // Console.WriteLine($"The Job '{node}' that your Job Depends on hasn't been added, please add the required job.");
+             
                     continue;
 
                 }
@@ -408,35 +408,73 @@ namespace Ass3
             return earliestTimes;
         }
 
-        public HashSet<string> TopologicalSort(Dictionary<string, HashSet<string>> graph)
+        public List<string> TopologicalSort(Dictionary<string, HashSet<string>> graph)
         {
             HashSet<string> visited = new HashSet<string>();
-            HashSet<string> order = new HashSet<string>();
+            Stack<string> stack = new Stack<string>();
 
             foreach (string node in graph.Keys)
             {
                 if (!visited.Contains(node))
-                    DFS2(node, graph, visited, order);
+                    DFS2(node, graph, visited, stack);
             }
+
+            List<string> order = new List<string>();
+
+            while (stack.Count > 0)
+            {
+                order.Add(stack.Pop());
+            }
+
+            
+            order.Reverse();
 
             return order;
         }
 
-        public void DFS2(string node, Dictionary<string, HashSet<string>> graph, HashSet<string> visited, HashSet<string> order)
-        {
-            visited.Add(node);
+        //public void DFS2(string node, Dictionary<string, HashSet<string>> graph, HashSet<string> visited, Stack<string> stack)
+        //{
+        //    visited.Add(node);
 
-            if (graph.ContainsKey(node))
+        //    if (graph.ContainsKey(node))
+        //    {
+        //        foreach (string neighbor in graph[node])
+        //        {
+        //            if (!visited.Contains(neighbor))
+        //                DFS2(neighbor, graph, visited, stack);
+        //        }
+        //    }
+
+
+        //    stack.Push(node);
+        //}
+        public void DFS2(string node, Dictionary<string, HashSet<string>> graph, HashSet<string> visited, Stack<string> stack)
+        {
+            Stack<string> dfsStack = new Stack<string>();
+            dfsStack.Push(node);
+
+            while (dfsStack.Count > 0)
             {
-                foreach (string neighbor in graph[node])
+                string current = dfsStack.Pop();
+
+                // If the node has not been visited yet
+                if (!visited.Contains(current))
                 {
-                    if (!visited.Contains(neighbor))
-                        DFS2(neighbor, graph, visited, order);
+                    visited.Add(current);
+                    stack.Push(current);
+
+                    if (graph.ContainsKey(current))
+                    {
+                        foreach (string neighbor in graph[current])
+                        {
+                            if (!visited.Contains(neighbor))
+                                dfsStack.Push(neighbor);
+                        }
+                    }
                 }
             }
-
-            order.Add(node);
         }
+        
 
 
 
@@ -446,80 +484,6 @@ namespace Ass3
 
 
 
-
-
-
-        //public LinkedList<string> FindJobSequenceWithRecursion(Dictionary<string, Job> jobs)
-        //{
-        //    LinkedList<string> sequence = new LinkedList<string>();
-        //    HashSet<string> visited = new HashSet<string>();
-        //    HashSet<string> recursionStack = new HashSet<string>();
-        //    foreach (Job job in jobs.Values)
-        //    {
-        //        if (!visited.Contains(job.JobID)) 
-        //        {
-        //            if (!DFSWithRecursion(job, sequence, visited, recursionStack, jobs)) 
-        //            {
-        //                Console.WriteLine("There is a circular dependency in the jobs graph.");
-        //                return null;
-        //            }
-        //        }
-        //    }
-        //    return sequence;
-        //}
-
-        //private bool DFSWithRecursion(Job startJob, LinkedList<string> sequence, HashSet<string> visited, HashSet<string> recursionStack, Dictionary<string, Job> jobs)
-        //{
-        //    Stack<Job> stack = new Stack<Job>();
-        //    stack.Push(startJob);
-        //    recursionStack.Add(startJob.JobID); // Add to recursion stack
-
-        //    while (stack.Count > 0)
-        //    {
-        //        Job job = stack.Peek();
-
-        //        if (job.JobDependencies != null)
-        //        {
-        //            bool allDependenciesVisited = true;
-
-        //            foreach (string dependencyId in job.JobDependencies)
-        //            {
-        //                if (!jobs.ContainsKey(dependencyId))
-        //                {
-                            
-        //                    continue;
-        //                }
-
-        //                Job dependencyJob = jobs[dependencyId];
-
-        //                if (!visited.Contains(dependencyJob.JobID))
-        //                {
-        //                    if (recursionStack.Contains(dependencyJob.JobID)) 
-        //                    {
-        //                        return false;
-        //                    }
-
-        //                    stack.Push(dependencyJob);
-        //                    recursionStack.Add(dependencyJob.JobID); 
-        //                    allDependenciesVisited = false;
-        //                    break;
-        //                }
-        //            }
-
-        //            if (!allDependenciesVisited)
-        //            {
-        //                continue;
-        //            }
-        //        }
-
-        //        stack.Pop();
-        //        visited.Add(job.JobID);
-        //        recursionStack.Remove(job.JobID); 
-        //        sequence.AddLast(job.JobID);
-        //    }
-
-        //    return true;
-        //}
 
     }
 
