@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -330,7 +328,7 @@ namespace Ass3
         }
 
 
-        
+
         public LinkedList<string> FindEarliestTime(Dictionary<string, Job> jobs)
         {
             
@@ -432,55 +430,22 @@ namespace Ass3
             return order;
         }
 
-        //public void DFS2(string node, Dictionary<string, HashSet<string>> graph, HashSet<string> visited, Stack<string> stack)
-        //{
-        //    visited.Add(node);
-
-        //    if (graph.ContainsKey(node))
-        //    {
-        //        foreach (string neighbor in graph[node])
-        //        {
-        //            if (!visited.Contains(neighbor))
-        //                DFS2(neighbor, graph, visited, stack);
-        //        }
-        //    }
-
-
-        //    stack.Push(node);
-        //}
         public void DFS2(string node, Dictionary<string, HashSet<string>> graph, HashSet<string> visited, Stack<string> stack)
         {
-            Stack<string> dfsStack = new Stack<string>();
-            dfsStack.Push(node);
+            visited.Add(node);
 
-            while (dfsStack.Count > 0)
+            if (graph.ContainsKey(node))
             {
-                string current = dfsStack.Pop();
-
-                // If the node has not been visited yet
-                if (!visited.Contains(current))
+                foreach (string neighbor in graph[node])
                 {
-                    visited.Add(current);
-                    stack.Push(current);
-
-                    if (graph.ContainsKey(current))
-                    {
-                        foreach (string neighbor in graph[current])
-                        {
-                            if (!visited.Contains(neighbor))
-                                dfsStack.Push(neighbor);
-                        }
-                    }
+                    if (!visited.Contains(neighbor))
+                        DFS2(neighbor, graph, visited, stack);
                 }
             }
+
+         
+            stack.Push(node);
         }
-        
-
-
-
-
-
-
 
 
 

@@ -57,10 +57,10 @@ namespace Ass3
                       //  fileManager.UpdateFile(path, jobs);
                         break;
                     case "4":
-                        Stopwatch stopWatch = new Stopwatch();
-                        stopWatch.Start();
+                       // Stopwatch stopWatch = new Stopwatch();
+                       // stopWatch.Start();
                         LinkedList<string> jobSequence = jobManager.FindJobSequence(jobs);
-                        stopWatch.Stop();
+                       // stopWatch.Stop();
                         if (jobSequence != null)
                         {
                             Console.WriteLine($"{string.Join(", ", jobSequence)}");
@@ -68,16 +68,16 @@ namespace Ass3
                        
                         fileManager.UpdateSequence(jobSequence);
                        
-                        TimeSpan ts = stopWatch.Elapsed;
-                        string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
-                        Console.WriteLine("RunTime " + elapsedTime);
+                      //  TimeSpan ts = stopWatch.Elapsed;
+                     //   string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds,ts.Milliseconds / 10);
+                     //   Console.WriteLine("RunTime " + elapsedTime);
                         
                         break;
                     case "5":
-                        Stopwatch stopWatch2 = new Stopwatch();
-                       stopWatch2.Start();
+                      //  Stopwatch stopWatch2 = new Stopwatch();
+                    //   stopWatch2.Start();
                         LinkedList<string> jobearliest = jobManager.FindEarliestTime(jobs);
-                        stopWatch2.Stop();
+                     //   stopWatch2.Stop();
                         if (jobearliest != null)
                         {
                             Console.WriteLine($"{string.Join("", jobearliest)}");
@@ -85,9 +85,9 @@ namespace Ass3
                       
                         fileManager.UpdateEarilestTimes(jobearliest);
                  
-                        TimeSpan ts2 = stopWatch2.Elapsed;
-                        string elapsedTime2 = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts2.Hours, ts2.Minutes, ts2.Seconds, ts2.Milliseconds / 10);
-                        Console.WriteLine("RunTime " + elapsedTime2);
+                      //  TimeSpan ts2 = stopWatch2.Elapsed;
+                     //   string elapsedTime2 = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts2.Hours, ts2.Minutes, ts2.Seconds, ts2.Milliseconds / 10);
+                   //     Console.WriteLine("RunTime " + elapsedTime2);
                         break;
                     case "6":
                         Environment.Exit(0);

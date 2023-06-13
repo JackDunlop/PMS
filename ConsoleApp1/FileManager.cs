@@ -14,19 +14,44 @@ namespace Ass3
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    string[] parts = line.Split(',');
-                    string jobId = parts[0].Trim();
-                    uint jobTime = uint.Parse(parts[1]); // fix
-                    Console.WriteLine(jobTime);
-                    HashSet<string> jobDependencies = new HashSet<string>();
-
-                    for (int i = 2; i < parts.Length; i++)
+                    if (string.IsNullOrEmpty(line))
                     {
-                        jobDependencies.Add(parts[i]);
+                        continue;
                     }
 
-                    Job job = new Job(jobId, jobTime, jobDependencies);
-                    jobs[jobId] = job;
+                    try
+                    {
+                        string[] parts = line.Split(',');
+                        if (parts.Length < 2)
+                        {
+                            // Log error or throw an exception
+                            Console.WriteLine($"Invalid line: {line}");
+                            continue;
+                        }
+
+                        string jobId = parts[0].Trim();
+                        if (!uint.TryParse(parts[1], out uint jobTime))
+                        {
+                            // Log error or throw an exception
+                            Console.WriteLine($"Invalid job time in line: {line}");
+                            continue;
+                        }
+
+                        HashSet<string> jobDependencies = new HashSet<string>();
+
+                        for (int i = 2; i < parts.Length; i++)
+                        {
+                            jobDependencies.Add(parts[i]);
+                        }
+
+                        Job job = new Job(jobId, jobTime, jobDependencies);
+                        jobs[jobId] = job;
+                    }
+                    catch (Exception e)
+                    {
+                        // Log the exception or handle it appropriately
+                        Console.WriteLine($"Error while processing line: {line}. Exception: {e}");
+                    }
                 }
                 return jobs;
             }
@@ -39,11 +64,11 @@ namespace Ass3
             {
                 Console.WriteLine($"Opening existing file: {path}");
                 ReadJobs(path, jobs);
-                //foreach (Job job in jobs.Values)
-                //{
-                //    string dependencies = job.JobDependencies != null && job.JobDependencies.Any() ? $", {string.Join(", ", job.JobDependencies)}" : " ";
-                //    Console.WriteLine($"{job.JobID}, {job.JobTime}{dependencies}");
-                //}
+                foreach (Job job in jobs.Values)
+                {
+                    string dependencies = job.JobDependencies != null && job.JobDependencies.Any() ? $", {string.Join(", ", job.JobDependencies)}" : " ";
+                    Console.WriteLine($"{job.JobID}, {job.JobTime}{dependencies}");
+                }
                 return jobs;
             }
             else
@@ -76,8 +101,8 @@ namespace Ass3
             {
                 foreach (Job job in jobs.Values)
                 {
-                    string dependencies = job.JobDependencies != null && job.JobDependencies.Any() ? $", {string.Join(", ", job.JobDependencies)}" : " ";
-                    writer.WriteLine($"{job.JobID}, {job.JobTime}{dependencies}");
+                    string dependencies = job.JobDependencies != null && job.JobDependencies.Any() ? $", {string.Join(",", job.JobDependencies)}" : " ";
+                    writer.WriteLine($"{job.JobID}, {job.JobTime} {dependencies}");
                 }
                
             }
