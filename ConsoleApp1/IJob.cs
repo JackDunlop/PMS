@@ -9,7 +9,7 @@ namespace Ass3
     public interface IJob
     {
 
-        // half of the methods should be private or other  types of access modifiers for test sake i made them all public
+        // half of the methods should be private or other methods for test sake i made them all public
 
         public string JobID { get; set; }
         public uint JobTime { get; set; }
@@ -31,11 +31,11 @@ namespace Ass3
         
 
         public Dictionary<string, uint> CalculateEarliestTimes(Dictionary<string, HashSet<string>> graph, Dictionary<string, uint> durations);
+
+
+        public List<string> TopologicalSort(Dictionary<string, HashSet<string>> graph);
+        public void DFS2(string node, Dictionary<string, HashSet<string>> graph, HashSet<string> visited, Stack<string> stack);
         
-
-        public HashSet<string> TopologicalSort(Dictionary<string, HashSet<string>> graph);
-
-        public void DFS2(string node, Dictionary<string, HashSet<string>> graph, HashSet<string> visited, HashSet<string> order);
        
 
 
